@@ -1,7 +1,8 @@
 import { browser } from '$app/environment';
 
-// This load function will inherit cookies from the server (if present)
-export function load({ data, cookies }) {
+// This load function runs in both server and client environments
+// Note: cookies is not available here, only in +page.server.js
+export function load({ data }) {
   // Default data if no saved data
   const defaultTodos = [
     { id: 1, text: 'Learn Svelte', completed: false },

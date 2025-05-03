@@ -3,6 +3,18 @@
 
   // Props - receive todo object and callback functions
   let { todo, onToggle, onDelete } = $props();
+
+  // Combined function for both client-side toggling and form submission
+  function handleToggle() {
+    // Call the client-side toggle function
+    onToggle();
+
+    // Also submit the form for server-side persistence
+    const form = document
+      .querySelector(`form[action="?/toggleTodo"] input[value="${todo.id}"]`)
+      .closest("form");
+    if (form) form.requestSubmit();
+  }
 </script>
 
 <li class="todo-item">
@@ -14,28 +26,14 @@
       style="display: inline"
     >
       <input type="hidden" name="id" value={todo.id} />
-      <input
-        type="checkbox"
-        checked={todo.completed}
-        on:change={onToggle}
-        on:change={() => {
-          // Submit the form when checkbox is changed
-          // (Progressive enhancement using both client and server)
-          const form = document
-            .querySelector(
-              `form[action="?/toggleTodo"] input[value="${todo.id}"]`
-            )
-            .closest("form");
-          if (form) form.requestSubmit();
-        }}
-      />
+      <input type="checkbox" checked={todo.completed} onchange={handleToggle} />
     </form>
     <span>{todo.text}</span>
   </label>
 
   <form method="POST" action="?/deleteTodo" use:enhance style="display: inline">
     <input type="hidden" name="id" value={todo.id} />
-    <button class="delete-btn" type="submit" on:click|preventDefault={onDelete}>
+    <button class="delete-btn" type="submit" onclick={onDelete}>
       Delete
     </button>
   </form>

@@ -2,16 +2,15 @@
   import TodoForm from "$lib/TodoForm.svelte";
   import TodoList from "$lib/TodoList.svelte";
   import { browser } from "$app/environment";
-  import { page } from "$app/stores";
 
-  // Get the data from the page load function
-  let { todos: initialTodos, nextId: initialNextId } = $page.data;
+  // Get the data from the page load function using $props()
+  let { data } = $props();
 
   // Main state for todos
-  let todos = $state(initialTodos);
+  let todos = $state(data.todos);
 
   // Generate unique ID for new todos
-  let nextId = $state(initialNextId);
+  let nextId = $state(data.nextId);
 
   // Save todos to localStorage when they change
   $effect(() => {
